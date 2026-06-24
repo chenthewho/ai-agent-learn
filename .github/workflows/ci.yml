@@ -1,0 +1,33 @@
+name: CI
+
+# 在 mock 模式（离线、零密钥）下跑通全部示例与项目，确保"每个演示案例都能跑"持续成立。
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  run-all:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Node deps
+        run: npm install
+
+      - name: Setup uv (manages Python 3.10+)
+        uses: astral-sh/setup-uv@v5
+
+      - name: Sync Python env (installs editable shared lib `aal`)
+        run: uv sync
+
+      - name: Run all examples + projects (mock backend)
+        env:
+          AAL_LLM: mock
+        run: npm test
