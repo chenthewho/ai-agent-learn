@@ -1,0 +1,17 @@
+[project]
+name = "ai-agent-learn-workspace"
+version = "1.0.0"
+description = "《从前端到 AI Agent 开发》配套可运行代码（Python 侧环境）"
+requires-python = ">=3.10"
+dependencies = ["aal", "pydantic>=2"]
+
+[tool.uv]
+package = false
+
+[tool.uv.sources]
+aal = { path = "shared/py", editable = true }
+
+# 真实模型为可选依赖：默认 mock 模式无需安装。
+# 想跑真实模型：uv pip install anthropic openai，并设置对应 API Key + AAL_LLM。
+[project.optional-dependencies]
+real = ["anthropic>=0.39", "openai>=1.50"]

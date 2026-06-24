@@ -1,0 +1,23 @@
+{
+  "name": "ai-agent-learn",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "《从前端到 AI Agent 开发》配套可运行代码 —— 默认离线 mock 模式，可切换真实模型",
+  "scripts": {
+    "test": "node scripts/run-all.mjs",
+    "test:ts": "node scripts/run-all.mjs --lang=ts",
+    "test:py": "node scripts/run-all.mjs --lang=py"
+  },
+  "dependencies": {
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
+  },
+  "optionalDependencies": {
+    "@anthropic-ai/sdk": "^0.32.1",
+    "openai": "^4.73.0"
+  }
+}
