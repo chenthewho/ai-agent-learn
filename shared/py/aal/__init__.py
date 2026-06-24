@@ -2,10 +2,13 @@
 
 与 TypeScript 版（shared/ts/aal.ts）保持 API 对等。
 
-统一 chat() 抽象，三种后端由环境变量 AAL_LLM 选择：
+统一 chat() 抽象，多种后端由环境变量 AAL_LLM 选择：
   - "mock"（默认）：用示例自带的"剧本"返回确定性响应，不联网、不花钱。
+  - "deepseek"：调用真实 DeepSeek（需要 DEEPSEEK_API_KEY；国内可直连，推荐）。
   - "anthropic"：调用真实 Claude（需要 ANTHROPIC_API_KEY）。
   - "openai"：调用真实 OpenAI（需要 OPENAI_API_KEY）。
+
+可选环境变量：AAL_MODEL 覆盖默认模型名；DEEPSEEK_BASE_URL 覆盖 DeepSeek 端点。
 """
 
 from __future__ import annotations
@@ -206,14 +209,23 @@ def _to_anthropic_message(m: Message) -> dict[str, Any]:
 
 
 class OpenAILLM(LLM):
-    def __init__(self, model: Optional[str] = None):
-        self.model = model or "gpt-4o"  # 以官方文档为准
+    """OpenAI 兼容后端（OpenAI / DeepSeek 等都走 OpenAI 兼容协议）。"""
+
+    def __init__(self, model: str, api_key: Optional[str] = None, base_url: Optional[str] = None):
+        self.model = model
+        self._api_key = api_key
+        self._base_url = base_url
 
     def chat(self, messages: list[Message], options: Optional[dict[str, Any]] = None) -> ChatResult:
         from openai import OpenAI  # 懒加载
 
         options = options or {}
-        client = OpenAI()
+        kw: dict[str, Any] = {}
+        if self._api_key:
+            kw["api_key"] = self._api_key
+        if self._base_url:
+            kw["base_url"] = self._base_url
+        client = OpenAI(**kw)
         msgs: list[dict[str, Any]] = []
         if options.get("system"):
             msgs.append({"role": "system", "content": options["system"]})
@@ -277,10 +289,18 @@ def backend_name() -> str:
 
 def create_llm(mock: Optional[MockResponder | list[MockTurn]] = None, model: Optional[str] = None) -> LLM:
     backend = backend_name()
+    env_model = os.environ.get("AAL_MODEL")
     if backend == "anthropic":
-        return AnthropicLLM(model)
+        return AnthropicLLM(model or env_model)
     if backend == "openai":
-        return OpenAILLM(model)
+        return OpenAILLM(model or env_model or "gpt-4o")
+    if backend == "deepseek":
+        # DeepSeek 走 OpenAI 兼容协议；国内可直连，适合中文用户。
+        return OpenAILLM(
+            model or env_model or "deepseek-v4-flash",
+            api_key=os.environ.get("DEEPSEEK_API_KEY"),
+            base_url=os.environ.get("DEEPSEEK_BASE_URL", "https://api.deepseek.com"),
+        )
     return MockLLM(mock)
 
 
@@ -458,6 +478,8 @@ PRICE_PER_MTOK: dict[str, dict[str, float]] = {
     "claude-sonnet-4-6": {"in": 3, "out": 15},
     "claude-haiku-4-5": {"in": 1, "out": 5},
     "gpt-4o": {"in": 2.5, "out": 10},
+    "deepseek-v4-flash": {"in": 0.3, "out": 1.2},  # 约值，以官方为准
+    "deepseek-v4-pro": {"in": 1, "out": 4},  # 约值，以官方为准
     "mock-model": {"in": 0, "out": 0},
 }
 

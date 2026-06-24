@@ -3,10 +3,13 @@
  *
  * 设计目标：让全书每个示例都能"离线、零密钥、确定性"地跑通。
  *
- * 核心是一个统一的 chat() 抽象，有三种后端，由环境变量 AAL_LLM 选择：
+ * 核心是一个统一的 chat() 抽象，有多种后端，由环境变量 AAL_LLM 选择：
  *   - "mock"（默认）：用示例自带的"剧本"返回确定性响应，不联网、不花钱。
+ *   - "deepseek"：调用真实 DeepSeek（需要 DEEPSEEK_API_KEY；国内可直连，推荐）。
  *   - "anthropic"：调用真实 Claude（需要 ANTHROPIC_API_KEY）。
  *   - "openai"：调用真实 OpenAI（需要 OPENAI_API_KEY）。
+ *
+ * 可选环境变量：AAL_MODEL 覆盖默认模型名；DEEPSEEK_BASE_URL 覆盖 DeepSeek 端点。
  *
  * 示例里演示"概念"的代码（Agent 循环、工具分发、RAG 检索）在三种后端下完全一致，
  * 只有"构造 LLM 客户端"这一处不同。这样既能离线验证代码正确，又能一键切真实模型。
@@ -210,14 +213,28 @@ function toAnthropicMessage(m: Message): any {
   return { role: m.role === "assistant" ? "assistant" : "user", content: m.content ?? "" };
 }
 
+/** OpenAI 兼容后端配置（OpenAI / DeepSeek 等都走 OpenAI 兼容协议） */
+interface OpenAICompatConfig {
+  model: string;
+  apiKey?: string;
+  baseURL?: string;
+}
+
 class OpenAILLM implements LLM {
   model: string;
-  constructor(model?: string) {
-    this.model = model ?? "gpt-4o"; // 以官方文档为准
+  private apiKey?: string;
+  private baseURL?: string;
+  constructor(cfg: OpenAICompatConfig) {
+    this.model = cfg.model;
+    this.apiKey = cfg.apiKey;
+    this.baseURL = cfg.baseURL;
   }
   async chat(messages: Message[], options: ChatOptions = {}): Promise<ChatResult> {
     const { default: OpenAI } = await import("openai");
-    const client = new OpenAI();
+    const client = new OpenAI({
+      ...(this.apiKey ? { apiKey: this.apiKey } : {}),
+      ...(this.baseURL ? { baseURL: this.baseURL } : {}),
+    });
     const msgs: any[] = [];
     if (options.system) msgs.push({ role: "system", content: options.system });
     for (const m of messages) {
@@ -293,11 +310,19 @@ export function backendName(): string {
 
 export function createLLM(opts: CreateLLMOptions = {}): LLM {
   const backend = backendName();
+  const envModel = process.env.AAL_MODEL;
   switch (backend) {
     case "anthropic":
-      return new AnthropicLLM(opts.model);
+      return new AnthropicLLM(opts.model ?? envModel);
     case "openai":
-      return new OpenAILLM(opts.model);
+      return new OpenAILLM({ model: opts.model ?? envModel ?? "gpt-4o" });
+    case "deepseek":
+      // DeepSeek 走 OpenAI 兼容协议；国内可直连，适合中文用户。
+      return new OpenAILLM({
+        model: opts.model ?? envModel ?? "deepseek-v4-flash",
+        apiKey: process.env.DEEPSEEK_API_KEY,
+        baseURL: process.env.DEEPSEEK_BASE_URL ?? "https://api.deepseek.com",
+      });
     case "mock":
     default:
       return new MockLLM(opts.mock);
@@ -481,6 +506,8 @@ export const PRICE_PER_MTOK: Record<string, { in: number; out: number }> = {
   "claude-sonnet-4-6": { in: 3, out: 15 },
   "claude-haiku-4-5": { in: 1, out: 5 },
   "gpt-4o": { in: 2.5, out: 10 },
+  "deepseek-v4-flash": { in: 0.3, out: 1.2 }, // 约值，以官方为准
+  "deepseek-v4-pro": { in: 1, out: 4 }, // 约值，以官方为准
   "mock-model": { in: 0, out: 0 },
 };
 

@@ -7,7 +7,9 @@
   "scripts": {
     "test": "node scripts/run-all.mjs",
     "test:ts": "node scripts/run-all.mjs --lang=ts",
-    "test:py": "node scripts/run-all.mjs --lang=py"
+    "test:py": "node scripts/run-all.mjs --lang=py",
+    "real-smoke": "tsx scripts/real-smoke.ts",
+    "real-smoke:py": "uv run python scripts/real-smoke.py"
   },
   "dependencies": {
     "zod": "^3.23.8"

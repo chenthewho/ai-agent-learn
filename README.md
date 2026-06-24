@@ -11,14 +11,26 @@
 
 所有示例**默认用 mock 后端**跑通 —— 不需要 API key、不联网、不依赖数据库/Docker，结果确定可复现。这让"每个示例都能跑、且能在 CI 里持续验证"成为可能。
 
-需要真实模型时，一个环境变量切换即可（代码无需改动）：
+需要真实模型时，一个环境变量切换即可（代码无需改动）。支持 **DeepSeek（国内可直连，推荐中文用户）/ Anthropic / OpenAI**：
 
 ```bash
-export AAL_LLM=anthropic   # 或 openai
-export ANTHROPIC_API_KEY=sk-ant-...   # 对应密钥
+# DeepSeek（推荐）
+export AAL_LLM=deepseek
+export DEEPSEEK_API_KEY=sk-...            # 默认模型 deepseek-v4-flash，可用 AAL_MODEL 覆盖
+
+# 或 Claude / OpenAI
+export AAL_LLM=anthropic && export ANTHROPIC_API_KEY=sk-ant-...
+export AAL_LLM=openai    && export OPENAI_API_KEY=sk-proj-...
 ```
 
-> mock 模式验证的是**代码正确性**（控制流、工具分发、RAG 检索、解析、成本计算等）；模型**回答质量**需切真实模型用你自己的 key 验证。
+跑一遍**真实模型冒烟**（基础对话 + 工具调用 Agent 循环 + RAG，断言与模型措辞无关的硬不变量）：
+
+```bash
+AAL_LLM=deepseek DEEPSEEK_API_KEY=sk-... npm run real-smoke      # TypeScript
+AAL_LLM=deepseek DEEPSEEK_API_KEY=sk-... npm run real-smoke:py   # Python
+```
+
+> mock 模式验证的是**代码正确性**（控制流、工具分发、RAG 检索、解析、成本计算等），并在 CI 里持续把关；模型**回答质量**则用上面的真实后端验证。两层各司其职。
 
 ## 快速开始
 
