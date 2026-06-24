@@ -9,9 +9,12 @@
     "test:ts": "node scripts/run-all.mjs --lang=ts",
     "test:py": "node scripts/run-all.mjs --lang=py",
     "real-smoke": "tsx scripts/real-smoke.ts",
-    "real-smoke:py": "uv run python scripts/real-smoke.py"
+    "real-smoke:py": "uv run python scripts/real-smoke.py",
+    "build:pdf": "node scripts/build-pdf.mjs"
   },
   "dependencies": {
+    "markdown-it": "^14.2.0",
+    "puppeteer-core": "^25.2.1",
     "zod": "^3.23.8"
   },
   "devDependencies": {

@@ -11,3 +11,8 @@ __pycache__/
 .uv/
 .idea/
 .vscode/
+
+# PDF 构建中间产物（PDF 本身保留提交）
+book.html
+_*.png
+scripts/_*.mjs
