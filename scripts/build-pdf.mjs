@@ -128,9 +128,22 @@ ${bodyHtml}
 <script>
   (async () => {
     try {
-      mermaid.initialize({ startOnLoad:false, theme:"default",
-        themeVariables:{ fontFamily:'"PingFang SC","Microsoft YaHei",sans-serif' },
-        flowchart:{ htmlLabels:true, useMaxWidth:true } });
+      mermaid.initialize({
+        startOnLoad:false, theme:'base',
+        themeVariables:{
+          fontFamily:'"PingFang SC","Microsoft YaHei","Helvetica Neue",sans-serif',
+          fontSize:'15px',
+          primaryColor:'#eef2ff', primaryBorderColor:'#6366f1', primaryTextColor:'#1e293b',
+          secondaryColor:'#ecfeff', secondaryBorderColor:'#0891b2',
+          tertiaryColor:'#f0fdf4', tertiaryBorderColor:'#16a34a',
+          lineColor:'#64748b', edgeLabelBackground:'#ffffff',
+          clusterBkg:'#f8fafc', clusterBorder:'#cbd5e1', titleColor:'#0f172a',
+          noteBkgColor:'#fef9c3', noteBorderColor:'#eab308'
+        },
+        flowchart:{ htmlLabels:true, useMaxWidth:true, curve:'basis', padding:14, nodeSpacing:46, rankSpacing:54 },
+        sequence:{ useMaxWidth:true, mirrorActors:false },
+        themeCSS:'.node rect,.node polygon,.node circle,.node ellipse,.node path{rx:10px;ry:10px;filter:drop-shadow(0 2px 5px rgba(15,23,42,0.12));} .cluster rect{rx:16px;ry:16px;filter:drop-shadow(0 1px 3px rgba(15,23,42,0.06));} .edgePath path,.flowchart-link{stroke-width:1.7px;} .marker{fill:#64748b;stroke:#64748b;} .node .label,.cluster-label{font-weight:600;} .edgeLabel{padding:2px 6px;border-radius:5px;font-size:13px;}'
+      });
       await mermaid.run({ querySelector: "pre.mermaid" });
     } catch (e) {
       window.__mermaidErr = String((e && e.message) || e);
