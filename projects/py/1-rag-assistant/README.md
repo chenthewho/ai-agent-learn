@@ -13,11 +13,11 @@
 
 ```bash
 # 仓库根目录执行
-node_modules/.bin/tsx projects/1-rag-assistant/index.ts          # TypeScript
-.venv/bin/python projects/1-rag-assistant/main.py                # Python
+node_modules/.bin/tsx projects/ts/1-rag-assistant/index.ts          # TypeScript
+.venv/bin/python projects/py/1-rag-assistant/main.py                # Python
 
 # 切真实 Claude（需 ANTHROPIC_API_KEY；此时忽略 mock 剧本，由模型据资料自答）
-AAL_LLM=anthropic node_modules/.bin/tsx projects/1-rag-assistant/index.ts
+AAL_LLM=anthropic node_modules/.bin/tsx projects/ts/1-rag-assistant/index.ts
 ```
 
 两种语言都打印 `✅ 通过` 即为跑通。

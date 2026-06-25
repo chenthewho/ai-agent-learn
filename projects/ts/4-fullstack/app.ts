@@ -25,7 +25,7 @@ import {
   createLLM,
   ToolRegistry,
   VectorStore,
-} from "../../shared/ts/aal.ts";
+} from "../../../shared/ts/aal.ts";
 
 // ============================================================
 // 流式事件类型（精简版协议）

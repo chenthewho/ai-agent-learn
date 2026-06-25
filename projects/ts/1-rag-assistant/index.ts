@@ -12,7 +12,7 @@
  *   node_modules/.bin/tsx projects/1-rag-assistant/index.ts          # 默认 mock，离线确定性
  *   AAL_LLM=anthropic node_modules/.bin/tsx projects/1-rag-assistant/index.ts  # 切真实 Claude（需 key）
  */
-import { createLLM, demo, assert, assertEqual, type MockResponder } from "../../shared/ts/aal.ts";
+import { createLLM, demo, assert, assertEqual, type MockResponder } from "../../../shared/ts/aal.ts";
 import { KnowledgeBase, NOT_FOUND, type RawDoc } from "./rag.ts";
 
 // 1) 知识库语料：5 篇主题差异明显的中文短文档（电商客服场景）

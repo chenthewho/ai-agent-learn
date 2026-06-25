@@ -26,8 +26,8 @@
 ## 运行
 
 ```bash
-node_modules/.bin/tsx projects/4-fullstack/index.ts   # TypeScript
-.venv/bin/python projects/4-fullstack/main.py         # Python
+node_modules/.bin/tsx projects/ts/4-fullstack/index.ts   # TypeScript
+.venv/bin/python projects/py/4-fullstack/main.py         # Python
 # 或：node scripts/run-all.mjs --filter=4-fullstack
 ```
 

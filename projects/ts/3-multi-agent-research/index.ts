@@ -10,7 +10,7 @@
  * 演示要点：编排者把研究问题拆给 researcher/writer/reviewer 三类子 Agent
  * （各自独立上下文 + 独立 mock 剧本），产出带编号引用的研究报告，并统计总成本。
  */
-import { createLLM, CostTracker, Tracer, demo, assert } from "../../shared/ts/aal.ts";
+import { createLLM, CostTracker, Tracer, demo, assert } from "../../../shared/ts/aal.ts";
 import { runResearch } from "./research.ts";
 
 await demo("项目三 多Agent研究系统：编排 researcher/writer/reviewer", async () => {

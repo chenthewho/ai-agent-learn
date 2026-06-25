@@ -23,8 +23,8 @@
 ## 运行
 
 ```bash
-node_modules/.bin/tsx projects/2-tool-agent/index.ts   # TypeScript
-.venv/bin/python projects/2-tool-agent/main.py         # Python
+node_modules/.bin/tsx projects/ts/2-tool-agent/index.ts   # TypeScript
+.venv/bin/python projects/py/2-tool-agent/main.py         # Python
 # 或：node scripts/run-all.mjs --filter=2-tool-agent
 ```
 

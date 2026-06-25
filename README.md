@@ -63,7 +63,7 @@ ai-agent-learn/
 │   ├── ts/aal.ts    # TS 共享库
 │   └── py/aal/      # Python 共享库（可编辑包）
 ├── examples/        # 每章可运行示例（index.ts + main.py）
-├── projects/        # 四个实战项目的可运行核心
+├── projects/        # 四个实战项目，按语言分目录：ts/<项目>/ 与 py/<项目>/
 ├── scripts/run-all.mjs   # 统一测试运行器
 ├── AUTHORING.md     # 写新示例的规范
 └── .github/workflows/ci.yml   # CI：在 mock 模式下跑通全部示例

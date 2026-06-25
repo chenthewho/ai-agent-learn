@@ -13,9 +13,9 @@ examples/<chXX-slug>/
 └── README.md    # 一句话说明 + 运行命令 + 对应书中章节（必需）
 ```
 
-项目在 `projects/<slug>/` 下，可有多个文件，但每个项目至少有一个冒烟入口：`smoke.ts` 和 `smoke.py`（或 `index.ts`/`main.py`）。
+项目按语言分目录：TypeScript 版在 `projects/ts/<slug>/`，Python 版在 `projects/py/<slug>/`，两侧各含一份 README。每个项目可有多个文件，但至少有一个冒烟入口：`index.ts`（或 `smoke.ts`）与 `main.py`（或 `smoke.py`）。
 
-> 目录深度固定为一层，是为了让 TS 的相对 import 路径恒为 `../../shared/ts/aal.ts`。
+> `examples/<slug>/` 深度固定为一层，TS 相对 import 恒为 `../../shared/ts/aal.ts`；`projects/{ts,py}/<slug>/` 深一层，故项目里的 TS 版用 `../../../shared/ts/aal.ts`。Python 一律 `from aal import ...`（装好的共享包，与位置无关）。
 
 ## 2. 如何引用共享库
 

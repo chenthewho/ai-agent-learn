@@ -10,7 +10,7 @@
  * 演示要点：对同一 sessionId 连发两条消息，验证流式事件协议、会话记忆与 RAG 命中。
  * 注意：这里只调用 handleChat 拿事件数组，不开任何网络端口（server.ts 仅供阅读）。
  */
-import { demo, assert } from "../../shared/ts/aal.ts";
+import { demo, assert } from "../../../shared/ts/aal.ts";
 import { createApp, handleChat, type ChatEvent } from "./app.ts";
 
 function printEvents(label: string, events: ChatEvent[]): void {

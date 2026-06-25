@@ -33,10 +33,10 @@
 
 ```bash
 # TypeScript
-node_modules/.bin/tsx projects/3-multi-agent-research/index.ts
+node_modules/.bin/tsx projects/ts/3-multi-agent-research/index.ts
 
 # Python
-.venv/bin/python projects/3-multi-agent-research/main.py
+.venv/bin/python projects/py/3-multi-agent-research/main.py
 ```
 
 默认 `mock` 后端：离线、零密钥、确定性。切真实模型：`AAL_LLM=anthropic`（需 `ANTHROPIC_API_KEY`），

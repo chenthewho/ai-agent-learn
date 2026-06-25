@@ -14,7 +14,7 @@
  *   - now           返回固定/可注入的时间（避免不确定）
  *   - write_file    危险工具：仅写进内存 map（不碰真实磁盘），演示审批门
  */
-import { ToolRegistry, type LLM, type Message, type ToolCall } from "../../shared/ts/aal.ts";
+import { ToolRegistry, type LLM, type Message, type ToolCall } from "../../../shared/ts/aal.ts";
 
 // ============================================================
 // 1) 安全算术求值（与第 1 章一致：白名单 + Function，杜绝任意代码执行）

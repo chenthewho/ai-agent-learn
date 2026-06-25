@@ -10,7 +10,7 @@
  * 真实化方向：把 VectorStore 换成 pgvector / Chroma，把 embed 换成
  * OpenAI text-embedding-3 / bge / gte，把 mock 生成换成真实 Claude（见同目录 README）。
  */
-import { VectorStore, chunk, type SearchHit, type LLM } from "../../shared/ts/aal.ts";
+import { VectorStore, chunk, type SearchHit, type LLM } from "../../../shared/ts/aal.ts";
 
 /** 一篇原始文档：来源标识用于答案里的引用展示 */
 export interface RawDoc {

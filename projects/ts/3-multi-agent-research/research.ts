@@ -22,7 +22,7 @@ import {
   CostTracker,
   Tracer,
   type Usage,
-} from "../../shared/ts/aal.ts";
+} from "../../../shared/ts/aal.ts";
 
 // ============================================================
 // 共享类型：子问题 / 来源 / 发现 / 黑板

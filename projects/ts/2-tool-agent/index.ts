@@ -16,7 +16,7 @@
  *   node_modules/.bin/tsx projects/2-tool-agent/index.ts          # 默认 mock，离线确定性
  *   AAL_LLM=anthropic node_modules/.bin/tsx projects/2-tool-agent/index.ts  # 切真实 Claude（需 key）
  */
-import { createLLM, demo, assert, assertEqual, type MockTurn } from "../../shared/ts/aal.ts";
+import { createLLM, demo, assert, assertEqual, type MockTurn } from "../../../shared/ts/aal.ts";
 import {
   MemoryFS,
   buildRegistry,
