@@ -88,6 +88,8 @@ for (const rel of FILES) {
 if (missing.length) console.warn("⚠️ 缺失文件:", missing);
 console.log(`  合并 ${FILES.length - missing.length} 个文件，含 ${mermaidCount} 个 Mermaid 图`);
 
+// 内联 mermaid（本地 bundle，不依赖 CDN，离线可靠）
+const mermaidJs = readFileSync(join(ROOT, "node_modules", "mermaid", "dist", "mermaid.min.js"), "utf-8");
 const today = new Date().toISOString().slice(0, 10);
 const html = `<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
 <style>
@@ -122,7 +124,7 @@ const html = `<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
   <div class="sub" style="margin-top:24px;">导出日期：${today}</div>
 </div>
 ${bodyHtml}
-<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>${mermaidJs}</script>
 <script>
   (async () => {
     try {
@@ -147,7 +149,7 @@ const browser = await puppeteer.launch({
   args: ["--no-sandbox", "--font-render-hinting=none"],
 });
 const page = await browser.newPage();
-await page.setContent(html, { waitUntil: "networkidle0", timeout: 180000 });
+await page.setContent(html, { waitUntil: "load", timeout: 180000 });
 await page.waitForFunction("window.__mermaidDone === true", { timeout: 180000 });
 
 // 校验每个 Mermaid 块是否渲染成功（定位失败块）

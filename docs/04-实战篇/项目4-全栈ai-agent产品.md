@@ -1196,12 +1196,12 @@ trace.span({
 
 ### 10.1 方案
 
-```
-浏览器 ──HTTPS──> Vercel (Next.js 前端 + /api/chat 路由)
-                      │
-                      ├──> Claude API（模型）
-                      ├──> 托管 Postgres + pgvector（Neon / Supabase）
-                      └──> 业务系统 API
+```mermaid
+flowchart LR
+    Browser["浏览器"] -->|HTTPS| Vercel["Vercel<br/>(Next.js 前端 + /api/chat 路由)"]
+    Vercel --> LLM["Claude API（模型）"]
+    Vercel --> PG["托管 Postgres + pgvector<br/>(Neon / Supabase)"]
+    Vercel --> Biz["业务系统 API"]
 ```
 
 为什么选它：前后端一个项目一次 `git push` 就部署、Vercel 帮你搞定 HTTPS/CDN/扩缩容、Neon/Supabase 给你一个带 pgvector 的托管 Postgres。前端工程师最熟的链路。
